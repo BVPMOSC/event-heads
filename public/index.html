@@ -8,7 +8,11 @@
     <title>Sample FirebaseUI App</title>
     <script src="https://www.gstatic.com/firebasejs/4.1.3/firebase.js"></script>
     <script>
-        // Initialize Firebase
+
+    </script>
+    <script src="https://cdn.firebase.com/libs/firebaseui/2.2.1/firebaseui.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.2.1/firebaseui.css" />
+    <script type="text/javascript">
         var config = {
             apiKey: "AIzaSyCLVOTGQygZMjYc39bjOpPgMQwhVhyW4lo",
             authDomain: "music-box-1237a.firebaseapp.com",
@@ -18,10 +22,6 @@
             messagingSenderId: "24629686597"
         };
         firebase.initializeApp(config);
-    </script>
-    <script src="https://cdn.firebase.com/libs/firebaseui/2.2.1/firebaseui.js"></script>
-    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.2.1/firebaseui.css" />
-    <script type="text/javascript">
         // FirebaseUI config.
         var uiConfig = {
             callbacks: {
@@ -44,7 +44,7 @@
             queryParameterForSignInSuccessUrl: 'signInSuccessUrl',
             // Will use popup for IDP Providers sign-in flow instead of the default, redirect.
             signInFlow: 'popup',
-            signInSuccessUrl: 'http://localhost:5000/register.html',
+            signInSuccessUrl: '/register.html',
             signInOptions: [
                 // Leave the lines as is for the providers you want to offer your users.
                 firebase.auth.GoogleAuthProvider.PROVIDER_ID,
@@ -70,22 +70,24 @@
         // The start method will wait until the DOM is loaded.
         ui.start('#firebaseui-auth-container', uiConfig);
     </script>
-      <link rel="stylesheet" type="text/css" href="semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="semantic.min.css">
 
     <style>
         body {
-         
+
             background-image: url('back.png') !important;
             background-size: cover !important;
             overflow: hidden;
         }
+
         .center {
             margin-top: 20vh;
         }
-        .center .login-text{
-             text-align: center;
+
+        .center .login-text {
+            text-align: center;
             color: #eee;
-             font-size: 50px;
+            font-size: 50px;
         }
     </style>
 </head>

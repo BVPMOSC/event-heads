@@ -144,41 +144,38 @@
               <div class="header">
                 Your user registration is successful.
               </div>
-              <div class="ui negative message hidden" id="messLog">
-                <div class="header">
-                  first Signin !
-                </div>
+              
               </div>
               <form style="margin-top:50px" class="ui form attached fluid segment custom-seg">
                 <div class="ui ">
                   <div class="field">
                     <div class="ui left icon input">
                       <i class="user icon"></i>
-                      <input type="text" name="name" placeholder="Name*">
+                      <input type="text" name="name" placeholder="Name*" required>
                     </div>
                   </div>
                   <div class="field">
                     <div class="ui left icon input">
                       <i class="mail icon"></i>
-                      <input type="text" name="email" placeholder="E-mail address*">
+                      <input type="text" name="email" placeholder="E-mail address*" required>
                     </div>
                   </div>
                   <div class="field">
                     <div class="ui left icon input">
                       <i class="github icon"></i>
-                      <input type="url" name="github" placeholder="Github Profile">
+                      <input type="url" name="github" placeholder="Github Profile" required> 
                     </div>
                   </div>
                   <div class="field">
                     <div class="ui left icon input">
                       <i class="university icon"></i>
-                      <input type="text" name="Society" placeholder="Society*">
+                      <input type="text" name="Society" placeholder="Society*" required>
                     </div>
                   </div>
                   <div class="field">
                     <div class="ui left icon input">
                       <i class="linkedin icon"></i>
-                      <input type="text" name="linkedin" placeholder="linkedin profile url*">
+                      <input type="text" name="linkedin" placeholder="linkedin profile url*" required>
                     </div>
                   </div>
                   <div id="submitForm" class="ui fluid large teal submit button">Register for verification!<i class="right arrow icon"></i></div>
@@ -205,9 +202,9 @@
     <script src="https://www.gstatic.com/firebasejs/4.1.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.1.1/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.1.1/firebase-messaging.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/live/4.1/firebase.js"></script>
 
     <script>
-      // Initialize Firebase
       var config = {
         apiKey: "AIzaSyCLVOTGQygZMjYc39bjOpPgMQwhVhyW4lo",
         authDomain: "music-box-1237a.firebaseapp.com",
@@ -218,80 +215,16 @@
       };
       firebase.initializeApp(config);
       // auth
+
       initApp = function () {
         firebase.auth().onAuthStateChanged(function (user) {
           if (user) {
             // User is signed in.
-            var displayName = user.displayName;
-            var email = user.email;
-            var emailVerified = user.emailVerified;
-            var photoURL = user.photoURL;
-            var uid = user.uid;
-            var phoneNumber = user.phoneNumber;
-            var providerData = user.providerData;
-            user.getToken().then(function (accessToken) {
-              $('.ui .form').submit(function (e) {
-                e.preventDefault()
-                if ($('.form').form('is valid') == true) {
-                  $('#submitForm').addClass('disabled')
-                  name = displayName
-                  email = email
-                  github = $('input[name="github"]').val()
-                  society = $('input[name="Society"]').val()
-                  linkedin = $('input[name="linkedin"]').val()
-                  writeUserData(name, email, github, society, linkedin)
-                }
-              })
-
-              $(document)
-                .ready(function () {
-                  $('.ui.form')
-                    .form({
-                      fields: {
-                        email: {
-                          identifier: 'email',
-                          rules: [
-                            {
-                              type: 'empty',
-                              prompt: 'Please enter your e-mail'
-                            },
-                            {
-                              type: 'email',
-                              prompt: 'Please enter a valid e-mail'
-                            }
-                          ]
-                        },
-                        name: {
-                          identifier: 'name',
-                          rules: [
-                            {
-                              type: 'empty',
-                              prompt: 'Please enter your name'
-                            }
-                          ]
-                        }
-                      }
-                    })
-                })
-                ;
-            });
-
-            function writeUserData(name, email, github, society, linkedin) {
-              firebase.database().ref('/heads').push().set({
-                name: name,
-                email: email,
-                github: github,
-                society: society,
-                linkedinProfile: linkedin
-              },
-                function () {
-                  $('#mess').removeClass('hidden')
-                });
-            }
-
-
-
-
+   
+             $('input[name="name"]').val(user.displayName)
+             $('input[name="email"]').val(user.email)
+     
+        
           } else {
             $('#messLog').removeClass('hidden')
           }
@@ -299,9 +232,74 @@
           console.log(error);
         });
       };
-
       window.addEventListener('load', function () {
         initApp()
+      });
+
+      function writeUserData(name, email, github, society, linkedin) {
+        firebase.database().ref('/heads').push().set({
+          name: name,
+          email: email,
+          github: github,
+          society: society,
+          linkedinProfile: linkedin
+        },
+          function () {
+            $('#mess').removeClass('hidden')
+          });
+      }
+  
+
+      $(document)
+        .ready(function () {
+          
+          $('.ui.form')
+            .form({
+              fields: {
+                email: {
+                  identifier: 'email',
+                  rules: [
+                    {
+                      type: 'empty',
+                      prompt: 'Please enter your e-mail'
+                    },
+                    {
+                      type: 'email',
+                      prompt: 'Please enter a valid e-mail'
+                    }
+                  ]
+                },
+                name: {
+                  identifier: 'name',
+                  rules: [
+                    {
+                      type: 'empty',
+                      prompt: 'Please enter your name'
+                    }
+                  ]
+                }
+              }
+            })
+        });
+
+      $('.ui .form').submit(function (e) {
+        e.preventDefault()
+        if ($('.form').form('is valid') == true) {
+          
+          name =  $('input[name="name"]').val()
+          email =  $('input[name="email"]').val()
+          github = $('input[name="github"]').val()
+          society = $('input[name="Society"]').val()
+          linkedin = $('input[name="linkedin"]').val()
+          
+          if(name===""||email===""||github===""||society===""||linkedin===""){
+            alert('please enter full details')
+          }
+          else{
+             writeUserData(name, email, github, society, linkedin)
+             $('#submitForm').addClass('disabled')
+          }  
+      }
       });
     </script>
 </body>
