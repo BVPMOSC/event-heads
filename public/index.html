@@ -52,16 +52,8 @@
                     provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
                     // Whether the display name should be displayed in the Sign Up page.
                     requireDisplayName: true
-                },
-                {
-                    provider: firebase.auth.PhoneAuthProvider.PROVIDER_ID,
-                    // Invisible reCAPTCHA with image challenge and bottom left badge.
-                    recaptchaParameters: {
-                        type: 'image',
-                        size: 'invisible',
-                        badge: 'bottomleft'
-                    }
                 }
+             
             ]
 
         };
