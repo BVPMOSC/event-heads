@@ -12,7 +12,7 @@
   <!-- Site Properties -->
   <title>BVP Mozilla Open Source Club</title>
   <script src="https://cdn.firebase.com/libs/firebaseui/2.2.1/firebaseui.js"></script>
-<link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.2.1/firebaseui.css" />
+  <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.2.1/firebaseui.css" />
   <link rel="stylesheet" type="text/css" href="semantic.min.css">
 
   <style type="text/css">
@@ -144,133 +144,166 @@
               <div class="header">
                 Your user registration is successful.
               </div>
-            </div>
-            <form style="margin-top:50px" class="ui form attached fluid segment custom-seg">
-              <div class="ui ">
-                <div class="field">
-                  <div class="ui left icon input">
-                    <i class="user icon"></i>
-                    <input type="text" name="name" placeholder="Name*">
-                  </div>
+              <div class="ui negative message hidden" id="messLog">
+                <div class="header">
+                  first Signin !
                 </div>
-                <div class="field">
-                  <div class="ui left icon input">
-                    <i class="mail icon"></i>
-                    <input type="text" name="email" placeholder="E-mail address*">
-                  </div>
-                </div>
-                <div class="field">
-                  <div class="ui left icon input">
-                    <i class="github icon"></i>
-                    <input type="url" name="github" placeholder="Github Profile">
-                  </div>
-                </div>
-                <div class="field">
-                  <div class="ui left icon input">
-                    <i class="university icon"></i>
-                    <input type="text" name="Society" placeholder="Society*">
-                  </div>
-                </div>
-                <div class="field">
-                  <div class="ui left icon input">
-                    <i class="linkedin icon"></i>
-                    <input type="text" name="linkedin" placeholder="linkedin profile url*">
-                  </div>
-                </div>
-                <div id="submitForm" class="ui fluid large teal submit button">Register for verification!<i class="right arrow icon"></i></div>
               </div>
-            </form>
+              <form style="margin-top:50px" class="ui form attached fluid segment custom-seg">
+                <div class="ui ">
+                  <div class="field">
+                    <div class="ui left icon input">
+                      <i class="user icon"></i>
+                      <input type="text" name="name" placeholder="Name*">
+                    </div>
+                  </div>
+                  <div class="field">
+                    <div class="ui left icon input">
+                      <i class="mail icon"></i>
+                      <input type="text" name="email" placeholder="E-mail address*">
+                    </div>
+                  </div>
+                  <div class="field">
+                    <div class="ui left icon input">
+                      <i class="github icon"></i>
+                      <input type="url" name="github" placeholder="Github Profile">
+                    </div>
+                  </div>
+                  <div class="field">
+                    <div class="ui left icon input">
+                      <i class="university icon"></i>
+                      <input type="text" name="Society" placeholder="Society*">
+                    </div>
+                  </div>
+                  <div class="field">
+                    <div class="ui left icon input">
+                      <i class="linkedin icon"></i>
+                      <input type="text" name="linkedin" placeholder="linkedin profile url*">
+                    </div>
+                  </div>
+                  <div id="submitForm" class="ui fluid large teal submit button">Register for verification!<i class="right arrow icon"></i></div>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
+
       </div>
-
     </div>
-  </div>
 
-  <script type="text/javascript" src="jquery.js"></script>
-  <script type="text/javascript" src="semantic.min.js"></script>
+    <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript" src="semantic.min.js"></script>
 
 
-  <script type="text/javascript">
-    $('.ui .form').submit(function (e) {
-      e.preventDefault()
-      if ($('.form').form('is valid') == true) {
-        $('#submitForm').addClass('disabled')
-        name = $('input[name="name"]').val()
-        email = $('input[name="email"]').val()
-        github = $('input[name="github"]').val()
-        society = $('input[name="Society"]').val()
-        linkedin = $('input[name="linkedin"]').val()
-        writeUserData(name, email, github,society,linkedin)
-      }
-    })
+    <script type="text/javascript">
 
-    $(document)
-      .ready(function () {
-        $('.ui.form')
-          .form({
-            fields: {
-              email: {
-                identifier: 'email',
-                rules: [
-                  {
-                    type: 'empty',
-                    prompt: 'Please enter your e-mail'
-                  },
-                  {
-                    type: 'email',
-                    prompt: 'Please enter a valid e-mail'
-                  }
-                ]
+    </script>
+
+
+    <!-- Firebase Portion -->
+
+    <script src="https://www.gstatic.com/firebasejs/4.1.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.1.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.1.1/firebase-messaging.js"></script>
+
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyCLVOTGQygZMjYc39bjOpPgMQwhVhyW4lo",
+        authDomain: "music-box-1237a.firebaseapp.com",
+        databaseURL: "https://music-box-1237a.firebaseio.com",
+        projectId: "music-box-1237a",
+        storageBucket: "music-box-1237a.appspot.com",
+        messagingSenderId: "24629686597"
+      };
+      firebase.initializeApp(config);
+      // auth
+      initApp = function () {
+        firebase.auth().onAuthStateChanged(function (user) {
+          if (user) {
+            // User is signed in.
+            var displayName = user.displayName;
+            var email = user.email;
+            var emailVerified = user.emailVerified;
+            var photoURL = user.photoURL;
+            var uid = user.uid;
+            var phoneNumber = user.phoneNumber;
+            var providerData = user.providerData;
+            user.getToken().then(function (accessToken) {
+              $('.ui .form').submit(function (e) {
+                e.preventDefault()
+                if ($('.form').form('is valid') == true) {
+                  $('#submitForm').addClass('disabled')
+                  name = displayName
+                  email = email
+                  github = $('input[name="github"]').val()
+                  society = $('input[name="Society"]').val()
+                  linkedin = $('input[name="linkedin"]').val()
+                  writeUserData(name, email, github, society, linkedin)
+                }
+              })
+
+              $(document)
+                .ready(function () {
+                  $('.ui.form')
+                    .form({
+                      fields: {
+                        email: {
+                          identifier: 'email',
+                          rules: [
+                            {
+                              type: 'empty',
+                              prompt: 'Please enter your e-mail'
+                            },
+                            {
+                              type: 'email',
+                              prompt: 'Please enter a valid e-mail'
+                            }
+                          ]
+                        },
+                        name: {
+                          identifier: 'name',
+                          rules: [
+                            {
+                              type: 'empty',
+                              prompt: 'Please enter your name'
+                            }
+                          ]
+                        }
+                      }
+                    })
+                })
+                ;
+            });
+
+            function writeUserData(name, email, github, society, linkedin) {
+              firebase.database().ref('/heads').push().set({
+                name: name,
+                email: email,
+                github: github,
+                society: society,
+                linkedinProfile: linkedin
               },
-              name: {
-                identifier: 'name',
-                rules: [
-                  {
-                    type: 'empty',
-                    prompt: 'Please enter your name'
-                  }
-                ]
-              }
+                function () {
+                  $('#mess').removeClass('hidden')
+                });
             }
-          })
-      })
-      ;
-
-  </script>
 
 
-  <!-- Firebase Portion -->
 
-  <script src="https://www.gstatic.com/firebasejs/4.1.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/4.1.1/firebase-database.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/4.1.1/firebase-messaging.js"></script>
 
-  <script>
-    // Initialize Firebase
-    var config = {
-    apiKey: "AIzaSyCLVOTGQygZMjYc39bjOpPgMQwhVhyW4lo",
-    authDomain: "music-box-1237a.firebaseapp.com",
-    databaseURL: "https://music-box-1237a.firebaseio.com",
-    projectId: "music-box-1237a",
-    storageBucket: "music-box-1237a.appspot.com",
-    messagingSenderId: "24629686597"
-    };
-    firebase.initializeApp(config);
-
-    function writeUserData(name, email, github,society,linkedin){
-      firebase.database().ref('/heads').push().set({
-        name: name,
-        email: email,
-        github: github,
-        society:society,
-        linkedinProfile:linkedin
-      },
-        function () {
-          $('#mess').removeClass('hidden')
+          } else {
+            $('#messLog').removeClass('hidden')
+          }
+        }, function (error) {
+          console.log(error);
         });
-    }
-  </script>
+      };
+
+      window.addEventListener('load', function () {
+        initApp()
+      });
+    </script>
 </body>
 
 </html>
