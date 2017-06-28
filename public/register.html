@@ -215,12 +215,12 @@
       };
       firebase.initializeApp(config);
       // auth
-
+      var userobj = null
       initApp = function () {
         firebase.auth().onAuthStateChanged(function (user) {
           if (user) {
             // User is signed in.
-   
+              userobj  = user
              $('input[name="name"]').val(user.displayName)
              $('input[name="email"]').val(user.email)
      
@@ -292,8 +292,8 @@
           society = $('input[name="Society"]').val()
           linkedin = $('input[name="linkedin"]').val()
           
-          if(name===""||email===""||github===""||society===""||linkedin===""){
-            alert('please enter full details')
+          if(name===""||email===""||github===""||society===""||linkedin==="" ||userobj ===null){
+            alert('please enter full details or Login !')
           }
           else{
              writeUserData(name, email, github, society, linkedin)
